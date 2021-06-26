@@ -1,0 +1,486 @@
+<script>
+	$(document).ready(function() {
+    
+    $('.changeItem').change(function(){
+        $('#generate').click();
+    });
+
+    $('#video-button').hide(); 
+    $(document).keypress(function (e) {
+        var key = e.which;
+         if(key == 13)  // the enter key code
+         {
+            $('#generate').click();
+             return false;  
+          }
+    });
+    
+    var testing = false;
+    $('#generate').click(function(){
+        if(!testing){$("#answer").hide(); $("#show-answer").val("Show Answer");}
+        $('#plot').hide();
+
+        var type;
+        // handles the formatting for selecting any type
+        if($("#type").val()=="any"){type = random(1,7);}
+        else{type = parseInt($("#type").val())}
+
+        generate(parseInt(type));       
+     });
+
+    $("#show-answer").click(function(){
+       if($("#answer").is(":hidden") ){
+          $("#answer").show();
+          $("#show-answer").val("Hide Answer");
+       } else{
+         $("#answer").hide();
+         $("#show-answer").val("Show Answer");
+        }
+    });
+    
+    if(testing){ $("#answer").show();}
+    
+	});
+	function generate(type){
+       
+       var videoLinks = ["https://www.youtube.com/watch?v=cg7wGB8V0ZM",
+                         "https://www.youtube.com/watch?v=bb2MRNMmNz0",
+                         "https://www.youtube.com/watch?v=XHpE8wnV0io",
+                         "https://www.youtube.com/watch?v=QfRqU5Mw0Ug",
+                         "https://www.youtube.com/watch?v=POExTikQfkI",
+                         "https://www.youtube.com/watch?v=Fite-lgNjGc",
+                         "https://www.youtube.com/watch?v=Mwc7118vPno"];
+       
+       if(videoLinks[type-1].length != 0){ 
+         $("#videoLink"). attr("href", videoLinks[type-1]);
+         $('#video-button').show();
+       }
+       else{
+         $('#video-button').hide();
+       }
+       
+       var problem = "";
+       var answer = "";
+       var a,b,c,d,e,f,g,h,l,w;
+       $("#generated").html("");
+       $("#answer").html("");
+   
+       switch(type) {
+           // Angles
+           case 1: 
+           
+           switch(random(0,7)){
+              
+              // straight angle
+              case 0:
+              problem = "What is the measure of a straight angle?";
+              answer = "\\(180^{\\circ}\\)";              
+              break;
+              
+              // right angle
+              case 1:
+              problem = "What is the measure of a right angle?";
+              answer = "\\(90^{\\circ}\\)";              
+              break;
+              
+              // acute angle
+              case 2:
+              problem = "What is the name of an angle that is less than \\(90^{\\circ}\\)?";
+              answer = "Acute angle";              
+              break;
+              
+              // obtuse angle
+              case 3:
+              problem = "What is the name of an angle that is more than \\(90^{\\circ}\\) and less than \\(180^{\\circ}\\)?";
+              answer = "Obtuse angle";              
+              break;
+              
+              // complementary
+              case 4:
+              problem = "What do we call two angles that add to \\(90^{\\circ}\\)?";
+              answer = "Complementary angles";              
+              break;
+              
+              // supplementary
+              case 5:
+              problem = "What do we call two angles that add to \\(180^{\\circ}\\)?";
+              answer = "Supplementary angles";              
+              break;
+              
+              // complement
+              case 6:
+              a = random(2,85);
+              b = 90-a;
+              problem = "What is the complement to a \\("+a+"^{\\circ}\\) angle?";
+              answer = "\\("+b+"^{\\circ}\\)";              
+              break;
+              
+              // supplement
+              case 7:
+              a = random(2,85);
+              b = 180-a;
+              problem = "What is the supplement to a \\("+a+"^{\\circ}\\) angle?";
+              answer = "\\("+b+"^{\\circ}\\)";              
+              break;
+           
+           }
+           
+           break;
+           
+           // Triangles
+           case 2: 
+           
+           switch(random(0,2)){
+              
+              // angles 1
+              case 0:
+              a = random(2,85);
+              b = random(5,150-a);
+              c = 180-b-a;
+              problem = "If two angles of a triangle are \\("+a+"^{\\circ}\\) and \\("+b+"^{\\circ}\\), what is the measure of the third angle?";
+              answer = "\\("+c+"^{\\circ}\\)";
+              break;
+              
+              // angles 2
+              case 1:
+              a = random(2,85);
+              b = random(5,150-a);
+              switch(random(0,1)){
+                 // Yes
+                 case 0:
+                 c = 180-b-a;
+                 answer = "Yes, since \\("+a+"^{\\circ} + "+b+"^{\\circ} + "+c+"^{\\circ} = 180^{\\circ}\\)";
+                 break;
+                 
+                 // No
+                 case 1:
+                 c = 180-b-a+random(3,8);
+                 answer = "No, since \\("+a+"^{\\circ} + "+b+"^{\\circ} + "+c+"^{\\circ} \\neq 180^{\\circ}\\)";
+                 break;
+              }
+              problem = "Can a triangle have angles of \\("+a+"^{\\circ}\\), \\("+b+"^{\\circ}\\), and \\("+c+"^{\\circ}\\)?";
+              break;
+              
+              // sides
+              case 2:
+              a = random(5,10);
+              b = random(5,10);
+              
+              switch(random(0,1)){
+              
+                  // Yes
+                  case 0:
+                  c = a+b-random(1,4);
+                  problem = "Can a triangle have side lengths of \\("+a+", "+b+",\\) and \\("+c+"\\)?";
+                  answer = "Yes, since \\("+a+" + "+b+" > "+c+"\\)";
+                  break;
+                  
+                  // No
+                  case 1:
+                  c = a+b+random(0,5);
+                  problem = "Can a triangle have side lengths of \\("+a+", "+b+",\\) and \\("+c+"\\)?";
+                  answer = "No, since \\("+a+" + "+b+" \\) is not more than \\( "+c+"\\)";
+                  break;
+              
+              }
+              
+              break;
+           
+           }
+           
+           break;
+           
+           // Circles
+           case 3: 
+           var r = random(2,9);
+           d = 2*r;
+           
+           problem = "\\(A= \\pi r^2 ~~~~~~~ C = \\pi d \\)<br>";
+           
+           switch(random(0,5)){
+           
+              // Finding Area
+              case 0:  
+              b = r*r;           
+              a = formatDec(round(b*Math.PI*100)/100);
+              
+              problem += "What is the area of a circle whose ";
+              
+              switch(random(0,1)){
+                 // give radius
+                 case 0:
+                 problem += "radius is \\("+r+"\\) cm?";
+                 break;
+                 
+                 // give diameter
+                 case 1:
+                 problem += "diameter is \\("+d+"\\) cm?";
+                 break;
+              }
+              answer = "\\("+b+"\\pi \\approx "+a+"~cm^{2}\\)";
+              
+              break;
+              
+              // Using Area (in terms of pi) to find r      
+              case 1: 
+              b = r*r; 
+              problem += "What is the ";
+              
+              switch(random(0,1)){
+                 // ask for radius
+                 case 0:
+                 problem += "radius";
+                 answer = "\\("+r+"~cm\\)";
+                 break;
+                 
+                 // ask for diameter
+                 case 1:
+                 problem += "diameter";
+                 answer = "\\("+d+"~cm\\)";
+                 break;
+              }
+              problem += " of a circle whose area is \\("+b+"\\pi ~cm^{2}\\)?";
+              break;
+              
+              // Finding Circumference
+              case 2:  
+              c = formatDec(round(d*Math.PI*100)/100);
+              
+              problem += "What is the circumference of a circle whose ";
+              
+              switch(random(0,1)){
+                 // give radius
+                 case 0:
+                 problem += "radius is \\("+r+"\\) cm?";
+                 break;
+                 
+                 // give diameter
+                 case 1:
+                 problem += "diameter is \\("+d+"\\) cm?";
+                 break;
+              }
+              answer = "\\("+d+"\\pi \\approx "+c+"~cm\\)";
+              
+              break;
+              
+              // Using Circumference (in terms of pi) to find d
+              case 3:            
+              problem += "What is the ";
+              
+              switch(random(0,1)){
+                 // ask for radius
+                 case 0:
+                 problem += "radius";
+                 answer = "\\("+r+"~cm\\)";
+                 break;
+                 
+                 // ask for diameter
+                 case 1:
+                 problem += "diameter";
+                 answer = "\\("+d+"~cm\\)";
+                 break;
+              }
+              problem += " of a circle whose circumference is \\("+d+"\\pi ~cm\\)?";
+              break;  
+              
+              // Find radius given diameter
+              case 4:
+              problem += "What is the radius of a circle whose diameter is \\("+d+"~cm\\)?";
+              answer = "\\("+r+"~cm\\)";
+              break;
+              
+              // Find diameter given radius
+              case 5:
+              problem += "What is the diameter of a circle whose radius is \\("+r+"~cm\\)?";
+              answer = "\\("+d+"~cm\\)";
+              break;
+           }
+           
+           break;
+           
+           // Volume of Prisms
+           case 4: 
+           problem = "\\(V = Bh\\)<br>";
+           switch(random(0,2)){       
+              // Non-rectangular
+              case 0:
+              h = random(5,20);
+              b = random(10,30);
+              a = formatDec(b*h);
+              problem += "What is the volume of a prism whose height is \\("+h+"~cm\\) and whose base area is \\("+b+"~cm^{2}\\)?";
+              answer = "\\("+a+"~cm^{3}\\)";
+              break;
+              
+              // Rectangular
+              case 1:
+              l = random(5,20);
+              w = random(5,20);
+              h = random(5,20);
+              a = formatDec(l*w*h);
+              problem += "What is the volume of a rectangular prism whose length is \\("+l+"~cm\\), width is \\("+w+"~cm\\), and height is \\("+h+"~cm\\)?";
+              answer = "\\("+a+"~cm^{3}\\)";
+              break; 
+              
+              // Triangular
+              case 2:
+              l = random(2,8)*2;
+              w = random(5,20);
+              h = random(5,20);
+              a = formatDec(l*w*h/2);
+              problem += "What is the volume of a triangular prism whose triangle base length is \\("+l+"~cm\\), triangle height is \\("+w+"~cm\\), and height of the prism is \\("+h+"~cm\\)?";
+              answer = "\\("+a+"~cm^{3}\\)";
+              break; 
+           }
+           
+           break;
+           
+           // Surface Area
+           case 5: 
+           l = random(5,20);
+           w = random(5,20);
+           h = random(5,20);
+           a = formatDec(2*l*w+2*w*h+2*l*h);
+           problem = "What is the surface area of a rectangular prism whose length is \\("+l+"~cm\\), width is \\("+w+"~cm\\), and height is \\("+h+"~cm\\)?";
+           answer = "\\("+a+"~cm^{2}\\)";
+           break;
+           
+           // Interior Angles of Polygons
+           case 6:
+           
+           a = random(4,20,1); // number of sides
+           b = (a-2)*180; // interior angle sum          
+           c = b/a;
+           if(!Number.isInteger(c)){
+              
+              c = round(c*10)/10;
+              c = "\\approx "+c;
+           }
+           
+           switch(random(0,1)){
+              
+              // find interior angle sum
+              case 0:
+              problem = "What is the sum of the interior angles of a \\("+a+"\\)-sided polygon?";
+              answer = "\\("+b+"^{o}\\)";
+              break;
+                           
+              // find the size of one angle if regular
+              case 1:
+              problem = "What is the measure of each interior angle of a regular \\("+a+"\\)-sided polygon?";
+              answer = "\\("+c+"^{o}\\)";                          
+              break;              
+           
+           }
+           
+           break;
+           
+           // Measuring Angles
+           case 7:
+           
+           // angle size
+           a = random(4, 70)*5;
+           problem = "Find the measure of \\(\\angle ABC\\)";
+           draw(a*Math.PI/180);
+           $('#plot').show();
+           answer = "\\("+a+"^{o}\\)";
+           
+           break;
+           
+       }
+
+       $("#generated").html(problem);
+       $("#answer").html(doublesigns(answer));
+       
+       renderMathInElement(document.body);
+       
+       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"generated"]);
+       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
+	}
+    
+    
+    // function that draws the angle
+    function draw(angle) {
+    try {
+
+      var angleOffset = random(0,Math.PI*1.5);
+
+      // render the angle using plotly
+      var trace1 = {
+        x: [1.3*Math.cos(angleOffset), 0, 1.3*Math.cos(angle+angleOffset)],
+        y: [1.3*Math.sin(angleOffset), 0, 1.3*Math.sin(angle+angleOffset)],
+        type: 'scatter',
+        text: ['A', 'B', 'C'],
+        textposition: 'top',
+        type: 'scatter',
+        mode: 'lines+markers+text',        
+        line: {
+          color: '#3F4591',
+          width: 2
+        },
+        name:"",
+      };    
+      
+      var axis_template ={
+        showgrid: false,
+        zeroline: false,
+        showticklabels: false,
+        nticks: 2,
+        range: [-1.5,1.5],
+      };
+      
+      // make grid smaller for mobile
+      var gridsize;
+      var indent;
+      // gridsize= Math.min(.95*window.innerWidth,550);
+      
+      if(window.innerWidth > 601){
+         gridsize = 550;
+         indent = 20;
+      }else{
+         gridsize = 350;
+         indent = 0;
+      }
+      
+      var layout = {
+        xaxis:axis_template,
+        yaxis:axis_template,
+        showlegend: false,
+        width: gridsize,
+        height: gridsize,
+        margin: {l: indent,  r: 30, t: 20}
+      };    
+      
+      var xValues = [];
+      var yValues = [];
+      
+      // new way to make the arc
+      // start at the offset, end at the offset+angle
+      for(var i = angleOffset; i <= angle+angleOffset; i = i+0.001){
+
+          xValues.push(0.2*Math.cos(i));
+          yValues.push(0.2*Math.sin(i));
+
+      }
+
+      // render the arc using plotly
+      var trace2 = {
+        x: xValues,
+        y: yValues,
+        type: 'scatter',
+        mode: 'lines',        
+        line: {
+          color: '#3F4591',
+          width: 2
+        },
+        name:"",
+      };
+      
+      var data = [trace1, trace2];
+      Plotly.newPlot('plot', data, layout,{displayModeBar: false});
+    }
+    catch (err) {
+      console.error(err)
+      alert(err)
+    }
+  }
+</script>
