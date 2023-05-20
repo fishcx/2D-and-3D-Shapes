@@ -197,7 +197,7 @@
            
            problem = "\\(A= \\pi r^2 ~~~~~~~ C = \\pi d \\)<br>";
            
-           switch(random(0,5)){
+           switch(random(0,4)){
            
               // Finding Area
               case 0:  
@@ -221,29 +221,8 @@
               
               break;
               
-              // Using Area (in terms of pi) to find r      
-              case 1: 
-              b = r*r; 
-              problem += "What is the ";
-              
-              switch(random(0,1)){
-                 // ask for radius
-                 case 0:
-                 problem += "radius";
-                 answer = "\\("+r+"~cm\\)";
-                 break;
-                 
-                 // ask for diameter
-                 case 1:
-                 problem += "diameter";
-                 answer = "\\("+d+"~cm\\)";
-                 break;
-              }
-              problem += " of a circle whose area is \\("+b+"\\pi ~cm^{2}\\)?";
-              break;
-              
               // Finding Circumference
-              case 2:  
+              case 1:  
               c = formatDec(round(d*Math.PI*100)/100);
               
               problem += "What is the circumference of a circle whose ";
@@ -264,7 +243,7 @@
               break;
               
               // Using Circumference (in terms of pi) to find d
-              case 3:            
+              case 2:            
               problem += "What is the ";
               
               switch(random(0,1)){
@@ -284,16 +263,39 @@
               break;  
               
               // Find radius given diameter
-              case 4:
+              case 3:
               problem += "What is the radius of a circle whose diameter is \\("+d+"~cm\\)?";
               answer = "\\("+r+"~cm\\)";
               break;
               
               // Find diameter given radius
-              case 5:
+              case 4:
               problem += "What is the diameter of a circle whose radius is \\("+r+"~cm\\)?";
               answer = "\\("+d+"~cm\\)";
               break;
+
+              /*
+              // Using Area (in terms of pi) to find r      
+              case 5: 
+              b = r*r; 
+              problem += "What is the ";
+              
+              switch(random(0,1)){
+                 // ask for radius
+                 case 0:
+                 problem += "radius";
+                 answer = "\\("+r+"~cm\\)";
+                 break;
+                 
+                 // ask for diameter
+                 case 1:
+                 problem += "diameter";
+                 answer = "\\("+d+"~cm\\)";
+                 break;
+              }
+              problem += " of a circle whose area is \\("+b+"\\pi ~cm^{2}\\)?";
+              break;
+              */
            }
            
            break;
