@@ -130,7 +130,7 @@
            // Triangles
            case 2: 
            
-           switch(random(0,2)){
+           switch(random(0,3)){
               
               // angles 1
               case 0:
@@ -162,7 +162,7 @@
               break;
               
               // sides
-              case 2:
+              case 2: case 3:
               a = random(5,10);
               b = random(5,10);
               
@@ -171,19 +171,19 @@
                   // Yes
                   case 0:
                   c = a+b-random(1,4);
-                  problem = "Can a triangle have side lengths of \\("+a+", "+b+",\\) and \\("+c+"\\)?";
                   answer = "Yes, since \\("+a+" + "+b+" > "+c+"\\)";
                   break;
                   
                   // No
                   case 1:
                   c = a+b+random(0,5);
-                  problem = "Can a triangle have side lengths of \\("+a+", "+b+",\\) and \\("+c+"\\)?";
                   answer = "No, since \\("+a+" + "+b+" \\) is not more than \\( "+c+"\\)";
                   break;
               
               }
               
+              problem = "Can a triangle have side lengths of "+mixSides(a,b,c)+"?";
+
               break;
            
            }
@@ -400,6 +400,41 @@
 	}
     
     
+    // function that rearranges the side lengths
+    function mixSides(side1,side2,side3)
+    { 
+      var outputStr = "";
+      switch(random(0,5)){
+
+          case 0:
+          outputStr = side1+", "+side2+",\\) and \\("+side3;
+          break;
+
+          case 1:
+          outputStr = side1+", "+side3+",\\) and \\("+side2;
+          break;
+
+          case 2:
+          outputStr = side2+", "+side3+",\\) and \\("+side1;
+          break;
+
+          case 3:
+          outputStr = side2+", "+side1+",\\) and \\("+side3;
+          break;
+
+          case 4:
+          outputStr = side3+", "+side1+",\\) and \\("+side2;
+          break;
+
+          case 5:
+          outputStr = side3+", "+side2+",\\) and \\("+side1;
+          break;
+
+      }
+
+      return "\\("+outputStr+"\\)";
+    }
+
     // function that draws the angle
     function draw(angle) {
     try {
