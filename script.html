@@ -22,7 +22,7 @@
 
         var type;
         // handles the formatting for selecting any type
-        if($("#type").val()=="any"){type = random(1,7);}
+        if($("#type").val()=="any"){type = random(1,6);}
         else{type = parseInt($("#type").val())}
 
         generate(parseInt(type));       
@@ -48,8 +48,8 @@
                          "https://www.youtube.com/watch?v=XHpE8wnV0io",
                          "https://www.youtube.com/watch?v=QfRqU5Mw0Ug",
                          "https://www.youtube.com/watch?v=POExTikQfkI",
-                         "https://www.youtube.com/watch?v=Fite-lgNjGc",
-                         "https://www.youtube.com/watch?v=Mwc7118vPno"];
+                         "https://www.youtube.com/watch?v=Mwc7118vPno",
+                         "https://www.youtube.com/watch?v=Fite-lgNjGc"];
        
        if(videoLinks[type-1].length != 0){ 
          $("#videoLink"). attr("href", videoLinks[type-1]);
@@ -347,7 +347,7 @@
            break;
            
            // Interior Angles of Polygons
-           case 6:
+           case 7:
            
            a = random(4,20,1); // number of sides
            b = (a-2)*180; // interior angle sum          
@@ -377,7 +377,7 @@
            break;
            
            // Measuring Angles
-           case 7:
+           case 6:
            
            // angle size
            a = random(4, 70)*5;
