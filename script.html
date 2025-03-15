@@ -321,7 +321,7 @@
               a = formatDec(l*w*h);
               problem += "What is the volume of a rectangular prism whose length is \\("+l+"~cm\\), width is \\("+w+"~cm\\), and height is \\("+h+"~cm\\)?";
               answer = "\\("+a+"~cm^{3}\\)";
-              drawRectPrism(determineCoords(w,h,l));
+              drawRectPrism(determineCoordsRect(w,h,l));
               $('#plot').show();
               break; 
               
@@ -346,7 +346,7 @@
            a = formatDec(2*l*w+2*w*h+2*l*h);
            problem = "What is the surface area of a rectangular prism whose length is \\("+l+"~cm\\), width is \\("+w+"~cm\\), and height is \\("+h+"~cm\\)?";
            answer = "\\("+a+"~cm^{2}\\)";
-           drawRectPrism(determineCoords(w,h,l));
+           drawRectPrism(determineCoordsRect(w,h,l));
            $('#plot').show();
            break;
            
@@ -526,7 +526,7 @@
   }
 
   // helper function which takes in three side lengths and determines how to make coordinates which are centered in 11 x 11 grid to allow for any rotation
-    function determineCoords(a,b,c){
+    function determineCoordsRect(a,b,c){
       
        var labels = [a,b,c];
 
@@ -553,10 +553,13 @@
        var xValues = [frontTopLeft.x,frontTopRight.x,frontBottomRight.x,frontBottomLeft.x,frontTopLeft.x,backTopLeft.x,backTopRight.x,frontTopRight.x,frontBottomRight.x,backBottomRight.x,backTopRight.x];
        var yValues = [frontTopLeft.y,frontTopRight.y, frontBottomRight.y, frontBottomLeft.y,frontTopLeft.y,backTopLeft.y,backTopRight.y,frontTopRight.y,frontBottomRight.y,backBottomRight.y,backTopRight.y];
 
+       var xdotted = [frontBottomLeft.x,backBottomLeft.x,backTopLeft.x,backBottomLeft.x,backBottomRight.x];
+       var ydotted = [frontBottomLeft.y,backBottomLeft.y,backTopLeft.y,backBottomLeft.y,backBottomRight.y]
+
        var xLabels = [(frontBottomLeft.x+frontBottomRight.x)/2,frontBottomLeft.x-1,(frontBottomRight.x+backBottomRight.x)/2+1];
        var yLabels = [frontBottomLeft.y-1,(frontBottomLeft.y+frontTopLeft.y)/2,(frontBottomRight.y+backBottomRight.y)/2-1];
 
-       return [xValues,yValues,xLabels,yLabels,labels];
+       return [xValues,yValues,xLabels,yLabels,labels,xdotted,ydotted];
     }
 
     function drawRectPrism(coordinates){
@@ -572,13 +575,26 @@
         name:"",
       };
       
+      // render the points using plotly
+      var trace2 = {
+        x: coordinates[5],
+        y: coordinates[6],
+        type: 'scatter',
+        mode: 'lines', 
+        line: {
+         dash: 'dash', // or 'dot', 'dashdot'
+        },
+        marker: {size: 3,color: '#3F4591',},
+        name:"",
+      };
+
       // Calculate the min and max values for x and y
       // Use this to autoscale the grid to fit the box
       const xMin = Math.min(coordinates[0]);
       const xMax = Math.max(coordinates[0]);
       const yMin = Math.min(coordinates[1]);
       const yMax = Math.max(coordinates[1]);
-
+      
       var xaxis_template ={
         showgrid: false,
         zeroline: false,
@@ -631,7 +647,7 @@
         hoverinfo:'none'
       };   
       
-      var data = [trace1,lengthLabels];
+      var data = [trace1,trace2,lengthLabels];
       Plotly.newPlot('plot', data, layout,{displayModeBar: false});
     }
     catch (err) {
