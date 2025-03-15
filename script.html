@@ -309,8 +309,8 @@
               h = random(5,20);
               b = random(10,30);
               a = formatDec(b*h);
-              problem += "What is the volume of a prism whose height is \\("+h+"~cm\\) and whose base area is \\("+b+"~cm^{2}\\)?";
-              answer = "\\("+a+"~cm^{3}\\)";
+              problem += "What is the volume of a prism whose height is \\("+h+"\\) cm and whose base area is \\("+b+"\\) cm\\(^{2}\\)?";
+              answer = "\\("+a+"\\) cm\\(^{3}\\)";
               break;
               
               // Rectangular
@@ -319,8 +319,8 @@
               w = random(5,20);
               h = random(5,20);
               a = formatDec(l*w*h);
-              problem += "What is the volume of a rectangular prism whose length is \\("+l+"~cm\\), width is \\("+w+"~cm\\), and height is \\("+h+"~cm\\)?";
-              answer = "\\("+a+"~cm^{3}\\)";
+              problem += "Determine the volume of the prism shown in cm\\(^3\\).";
+              answer = "\\("+a+"\\) cm\\(^{3}\\)";
               drawRectPrism(determineCoordsRect(w,h,l));
               $('#plot').show();
               break; 
@@ -331,8 +331,8 @@
               w = random(5,20);
               h = random(5,20);
               a = formatDec(l*w*h/2);
-              problem += "What is the volume of a triangular prism whose triangle base length is \\("+w+"~cm\\), triangle height is \\("+h+"~cm\\), and height of the prism is \\("+l+"~cm\\)?";
-              answer = "\\("+a+"~cm^{3}\\)";
+              problem += "Determine the volume of the prism shown in cm\\(^3\\).";
+              answer = "\\("+a+"\\) cm\\(^{3}\\)";
               drawTriPrism(determineCoordsTri(w,h,l));
               $('#plot').show();
               break; 
@@ -532,25 +532,16 @@
       
        var labels = [a,b,c];
 
-       var biggest = Math.max(a,b,c);
-       var sf = 15/biggest; // determine a scale factor to resize lengths to fit within 11 x 11 grid. Can make the size at most 22
-       a = Math.round((a*sf)*100000)/100000;
-       b = Math.round((b*sf)*100000)/100000;
-       c = Math.round((c*sf)*100000)/100000;
-
-      const x = 0;
-      const y = 0;
-
       // Define the coordinates of the prism's vertices
-      const frontBottomLeft = { x: -1*a, y: y - b / 2 };
-      const frontBottomRight = { x: a, y: y - b / 2 };
-      const frontTopLeft = { x: -1*a , y: y + b / 2 };
-      const frontTopRight = { x: a , y: y + b / 2 };
+      const frontBottomLeft = { x: -1*a, y: -1*b / 2 };
+      const frontBottomRight = { x: a, y: -1*b / 2 };
+      const frontTopLeft = { x: -1*a , y: b / 2 };
+      const frontTopRight = { x: a , y: b / 2 };
 
-      const backBottomLeft = { x: -1*a +c, y: y - b / 2 + c };
-      const backBottomRight = { x:  a +c, y: y - b / 2 + c };
-      const backTopLeft = { x: -1*a +c, y: y + b / 2 + c };
-      const backTopRight = { x: a+c, y: y + b / 2 + c };
+      const backBottomLeft = { x: -1*a +c, y:  -1*b / 2 + c };
+      const backBottomRight = { x:  a +c, y: -1*b / 2 + c };
+      const backTopLeft = { x: -1*a +c, y: b / 2 + c };
+      const backTopRight = { x: a+c, y: b / 2 + c };
       
        var xValues = [frontTopLeft.x,frontTopRight.x,frontBottomRight.x,frontBottomLeft.x,frontTopLeft.x,backTopLeft.x,backTopRight.x,frontTopRight.x,frontBottomRight.x,backBottomRight.x,backTopRight.x];
        var yValues = [frontTopLeft.y,frontTopRight.y, frontBottomRight.y, frontBottomLeft.y,frontTopLeft.y,backTopLeft.y,backTopRight.y,frontTopRight.y,frontBottomRight.y,backBottomRight.y,backTopRight.y];
@@ -664,23 +655,14 @@
       
        var labels = [a,b,c];
 
-       var biggest = Math.max(a,b,c);
-       var sf = 15/biggest; // determine a scale factor to resize lengths to fit within 11 x 11 grid. Can make the size at most 22
-       a = Math.round((a*sf)*100000)/100000;
-       b = Math.round((b*sf)*100000)/100000;
-       c = Math.round((c*sf)*100000)/100000;
-
-      const x = 0;
-      const y = 0;
-
       // Define the coordinates of the prism's vertices
-      const frontBottomLeft = { x: -1*a, y: y - b / 2 };
-      const frontBottomRight = { x: a, y: y - b / 2 };
-      const frontTopLeft = { x: -1*a , y: y + b / 2 };
+      const frontBottomLeft = { x: -1*a, y: -1*b / 2 };
+      const frontBottomRight = { x: a, y: -1*b / 2 };
+      const frontTopLeft = { x: -1*a , y: b / 2 };
 
-      const backBottomLeft = { x: -1*a +c, y: y - b / 2 + c };
-      const backBottomRight = { x:  a +c, y: y - b / 2 + c };
-      const backTopLeft = { x: -1*a +c, y: y + b / 2 + c };
+      const backBottomLeft = { x: -1*a +c, y: -1*b / 2 + c };
+      const backBottomRight = { x:  a +c, y: -1*b / 2 + c };
+      const backTopLeft = { x: -1*a +c, y: b / 2 + c };
       
        var xValues = [frontTopLeft.x,frontBottomRight.x,frontBottomLeft.x,frontTopLeft.x,backTopLeft.x,backBottomRight.x,frontBottomRight.x];
        var yValues = [frontTopLeft.y, frontBottomRight.y, frontBottomLeft.y,frontTopLeft.y,backTopLeft.y,backBottomRight.y,frontBottomRight.y];
