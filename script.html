@@ -192,7 +192,7 @@
            
            // Circles
            case 3: 
-           var r = random(2,9);
+           var r = random(3,9);
            d = 2*r;
            
            problem = "\\(A= \\pi r^2 ~~~~~~~ C = \\pi d \\)<br>";
@@ -204,42 +204,44 @@
               b = r*r;           
               a = formatDec(round(b*Math.PI*100)/100);
               
-              problem += "What is the area of a circle whose ";
+              problem += "What is the area of the circle shown?";
               
               switch(random(0,1)){
                  // give radius
                  case 0:
-                 problem += "radius is \\("+r+"\\) cm?";
+                 //problem += "radius is \\("+r+"\\) cm?";
+                 drawCircle(d,true,r+" cm");
                  break;
                  
                  // give diameter
                  case 1:
-                 problem += "diameter is \\("+d+"\\) cm?";
+                 //problem += "diameter is \\("+d+"\\) cm?";
+                 drawCircle(d,false,d+" cm");
                  break;
               }
-              answer = "\\("+b+"\\pi \\approx "+a+"~cm^{2}\\)";
-              
+              answer = "\\("+b+"\\pi \\approx "+a+"\\) cm\\(^{2}\\)";
+              $('#plot').show();
               break;
               
               // Finding Circumference
               case 1:  
               c = formatDec(round(d*Math.PI*100)/100);
               
-              problem += "What is the circumference of a circle whose ";
+              problem += "What is the circumference of the circle shown? ";
               
               switch(random(0,1)){
                  // give radius
                  case 0:
-                 problem += "radius is \\("+r+"\\) cm?";
+                 drawCircle(d,true,r+" cm");
                  break;
                  
                  // give diameter
                  case 1:
-                 problem += "diameter is \\("+d+"\\) cm?";
+                 drawCircle(d,false,d+" cm");
                  break;
               }
-              answer = "\\("+d+"\\pi \\approx "+c+"~cm\\)";
-              
+              answer = "\\("+d+"\\pi \\approx "+c+"\\) cm";
+              $('#plot').show();
               break;
               
               // Using Circumference (in terms of pi) to find d
@@ -264,14 +266,18 @@
               
               // Find radius given diameter
               case 3:
-              problem += "What is the radius of a circle whose diameter is \\("+d+"~cm\\)?";
-              answer = "\\("+r+"~cm\\)";
+              problem += "What is the radius of a circle shown?";
+              answer = "\\("+r+"\\) cm";
+              drawCircle(d,false,d+" cm");
+              $('#plot').show();
               break;
               
               // Find diameter given radius
               case 4:
-              problem += "What is the diameter of a circle whose radius is \\("+r+"~cm\\)?";
-              answer = "\\("+d+"~cm\\)";
+              problem += "What is the diameter of the circle shown?";
+              answer = "\\("+d+"\\)cm";
+              drawCircle(d,true,r+" cm");
+              $('#plot').show();
               break;
 
               /*
@@ -346,7 +352,7 @@
            w = random(5,20);
            h = random(5,20);
            a = formatDec(2*l*w+2*w*h+2*l*h);
-           problem = "What is the surface area of a rectangular prism whose length is \\("+l+"~cm\\), width is \\("+w+"~cm\\), and height is \\("+h+"~cm\\)?";
+           problem = "Determine the surface area of the prism shown in cm\\(^2\\).";
            answer = "\\("+a+"~cm^{2}\\)";
            drawRectPrism(determineCoordsRect(w,h,l));
            $('#plot').show();
@@ -635,7 +641,7 @@
         text:coordinates[4],
         textposition:"center",
         textfont: {
-          size:17,
+          size:20,
         },
         hoverinfo:'none'
       };   
@@ -740,7 +746,7 @@
         text:coordinates[4],
         textposition:"center",
         textfont: {
-          size:17,
+          size:20,
         },
         hoverinfo:'none'
       };   
@@ -754,4 +760,97 @@
     }
     
     }
+
+function drawCircle(diameter,isRadius,lengthLabel){
+    try {
+      var xCoords = [];
+
+      if(isRadius){ // draw a radius
+        xCoords = [1+diameter/2, 1+diameter];
+        xLabels = [.75*diameter+1];
+      }else{ //draw a diameter
+        xCoords = [1, diameter+1];
+        xLabels = [.5*diameter+1];
+      }
+
+     var trace1 = {
+        x: xCoords,
+        y: [diameter/2+1, diameter/2+1],
+        type: 'scatter',
+        mode: 'lines+markers', 
+        marker: {size: 3,color: '#3F4591',},
+        name:"",
+      };
+
+      // Calculate the min and max values for x and y
+      // Use this to autoscale the grid 
+      const scaleMin = 0;
+      const scaleMax = diameter+2;
+      
+      var axis_template ={
+        showgrid: false,
+        zeroline: false,
+        range: [scaleMin, scaleMax], 
+        showticklabels:false
+      };         
+
+      // make grid smaller for mobile
+      var gridsize;
+      var indent;
+      // gridsize= Math.min(.95*window.innerWidth,550);
+      
+      if(window.innerWidth > 601){
+         gridsize = 500;
+         indent = 20;
+      }else{
+         gridsize = 300;
+         indent = 0;
+      }
+      
+      var layout = {
+        xaxis:axis_template,
+        yaxis:axis_template,
+        showlegend: false,
+        width: gridsize,
+        height: gridsize,
+        hovermode: 'closest',
+        shapes: [
+        // Unfilled Circle
+        {
+       type: 'circle',
+        xref: 'x',
+        yref: 'y',
+        x0: 1,
+        y0: 1,
+        x1: diameter+1,
+        y1: diameter+1,
+        line: {
+          color: '#3F4591'
+        }
+        }
+        ]
+      };  
+      
+      var labels =   {
+        x: xLabels,
+        y: [diameter/2],
+        mode: 'text',
+        text:[lengthLabel],
+        textposition:"center",
+        textfont: {
+          size:20,
+        },
+        hoverinfo:'none'
+      };   
+
+      var data = [trace1,labels];
+      Plotly.newPlot('plot', data, layout,{displayModeBar: false});
+    }
+    catch (err) {
+      console.error(err)
+      alert(err)
+    }
+    
+    }
+
 </script>
