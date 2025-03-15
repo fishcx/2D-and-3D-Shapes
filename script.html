@@ -321,6 +321,8 @@
               a = formatDec(l*w*h);
               problem += "What is the volume of a rectangular prism whose length is \\("+l+"~cm\\), width is \\("+w+"~cm\\), and height is \\("+h+"~cm\\)?";
               answer = "\\("+a+"~cm^{3}\\)";
+              drawRectPrism(determineCoords(w,h,l));
+              $('#plot').show();
               break; 
               
               // Triangular
@@ -344,6 +346,8 @@
            a = formatDec(2*l*w+2*w*h+2*l*h);
            problem = "What is the surface area of a rectangular prism whose length is \\("+l+"~cm\\), width is \\("+w+"~cm\\), and height is \\("+h+"~cm\\)?";
            answer = "\\("+a+"~cm^{2}\\)";
+           drawRectPrism(determineCoords(w,h,l));
+           $('#plot').show();
            break;
            
            // Interior Angles of Polygons
@@ -520,4 +524,120 @@
       alert(err)
     }
   }
+
+  // helper function which takes in three side lengths and determines how to make coordinates which are centered in 11 x 11 grid to allow for any rotation
+    function determineCoords(a,b,c){
+      
+       var labels = [a,b,c];
+
+       var biggest = Math.max(a,b,c);
+       var sf = 15/biggest; // determine a scale factor to resize lengths to fit within 11 x 11 grid. Can make the size at most 22
+       a = Math.round((a*sf)*100000)/100000;
+       b = Math.round((b*sf)*100000)/100000;
+       c = Math.round((c*sf)*100000)/100000;
+
+      const x = 0;
+      const y = 0;
+
+      // Define the coordinates of the prism's vertices
+      const frontBottomLeft = { x: -1*a, y: y - b / 2 };
+      const frontBottomRight = { x: a, y: y - b / 2 };
+      const frontTopLeft = { x: -1*a , y: y + b / 2 };
+      const frontTopRight = { x: a , y: y + b / 2 };
+
+      const backBottomLeft = { x: -1*a +c, y: y - b / 2 + c };
+      const backBottomRight = { x:  a +c, y: y - b / 2 + c };
+      const backTopLeft = { x: -1*a +c, y: y + b / 2 + c };
+      const backTopRight = { x: a+c, y: y + b / 2 + c };
+      
+       var xValues = [frontTopLeft.x,frontTopRight.x,frontBottomRight.x,frontBottomLeft.x,frontTopLeft.x,backTopLeft.x,backTopRight.x,frontTopRight.x,frontBottomRight.x,backBottomRight.x,backTopRight.x];
+       var yValues = [frontTopLeft.y,frontTopRight.y, frontBottomRight.y, frontBottomLeft.y,frontTopLeft.y,backTopLeft.y,backTopRight.y,frontTopRight.y,frontBottomRight.y,backBottomRight.y,backTopRight.y];
+
+       var xLabels = [(frontBottomLeft.x+frontBottomRight.x)/2,frontBottomLeft.x-1,(frontBottomRight.x+backBottomRight.x)/2+1];
+       var yLabels = [frontBottomLeft.y-1,(frontBottomLeft.y+frontTopLeft.y)/2,(frontBottomRight.y+backBottomRight.y)/2-1];
+
+       return [xValues,yValues,xLabels,yLabels,labels];
+    }
+
+    function drawRectPrism(coordinates){
+    try {
+   
+      // render the points using plotly
+      var trace1 = {
+        x: coordinates[0],
+        y: coordinates[1],
+        type: 'scatter',
+        mode: 'lines+markers', 
+        marker: {size: 3,color: '#3F4591',},
+        name:"",
+      };
+      
+      // Calculate the min and max values for x and y
+      // Use this to autoscale the grid to fit the box
+      const xMin = Math.min(coordinates[0]);
+      const xMax = Math.max(coordinates[0]);
+      const yMin = Math.min(coordinates[1]);
+      const yMax = Math.max(coordinates[1]);
+
+      var xaxis_template ={
+        showgrid: false,
+        zeroline: false,
+        nticks: 23,
+        range: [xMin, xMax], 
+        showticklabels:false
+      };        
+
+      var yaxis_template ={
+        showgrid: false,
+        zeroline: false,
+        nticks: 23,
+        range: [yMin, yMax], 
+        showticklabels:false
+      };   
+
+      // make grid smaller for mobile
+      var gridsize;
+      var indent;
+      // gridsize= Math.min(.95*window.innerWidth,550);
+      
+      if(window.innerWidth > 601){
+         gridsize = 500;
+         indent = 20;
+      }else{
+         gridsize = 300;
+         indent = 0;
+      }
+      
+      var layout = {
+        xaxis:yaxis_template,
+        yaxis:xaxis_template,
+        showlegend: false,
+        width: gridsize,
+        height: gridsize,
+        hovermode: 'closest',   
+        font:{size: 18},
+        margin: {l: indent,  r: 30, t: 20}
+      };
+      
+      var lengthLabels =   {
+        x: coordinates[2],
+        y: coordinates[3],
+        mode: 'text',
+        text:coordinates[4],
+        textposition:"center",
+        textfont: {
+          size:17,
+        },
+        hoverinfo:'none'
+      };   
+      
+      var data = [trace1,lengthLabels];
+      Plotly.newPlot('plot', data, layout,{displayModeBar: false});
+    }
+    catch (err) {
+      console.error(err)
+      alert(err)
+    }
+    
+    }
 </script>
