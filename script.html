@@ -555,7 +555,7 @@
        var xdotted = [frontBottomLeft.x,backBottomLeft.x,backTopLeft.x,backBottomLeft.x,backBottomRight.x];
        var ydotted = [frontBottomLeft.y,backBottomLeft.y,backTopLeft.y,backBottomLeft.y,backBottomRight.y]
 
-       var xLabels = [(frontBottomLeft.x+frontBottomRight.x)/2,frontBottomLeft.x-1,(frontBottomRight.x+backBottomRight.x)/2+1];
+       var xLabels = [(frontBottomLeft.x+frontBottomRight.x)/2,frontBottomLeft.x-1.5,(frontBottomRight.x+backBottomRight.x)/2+1];
        var yLabels = [frontBottomLeft.y-1,(frontBottomLeft.y+frontTopLeft.y)/2,(frontBottomRight.y+backBottomRight.y)/2-1];
 
        return [xValues,yValues,xLabels,yLabels,labels,xdotted,ydotted];
@@ -673,10 +673,17 @@
        var xValues = [frontTopLeft.x,frontBottomRight.x,frontBottomLeft.x,frontTopLeft.x,backTopLeft.x,backBottomRight.x,frontBottomRight.x];
        var yValues = [frontTopLeft.y, frontBottomRight.y, frontBottomLeft.y,frontTopLeft.y,backTopLeft.y,backBottomRight.y,frontBottomRight.y];
 
-       var xLabels = [(frontBottomLeft.x+frontBottomRight.x)/2,frontBottomLeft.x-1,(frontBottomRight.x+backBottomRight.x)/2+1];
+       var xLabels = [(frontBottomLeft.x+frontBottomRight.x)/2,frontBottomLeft.x-1.5,(frontBottomRight.x+backBottomRight.x)/2+1];
        var yLabels = [frontBottomLeft.y-1,(frontBottomLeft.y+frontTopLeft.y)/2,(frontBottomRight.y+backBottomRight.y)/2-1];
+      
+       var angleboxsizeY = 1;
+       var angleboxsizeX = 1;
+       var angleCoords = [
+                            [frontBottomLeft.x,frontBottomLeft.x+angleboxsizeX,frontBottomLeft.x+angleboxsizeX],
+                            [frontBottomLeft.y+angleboxsizeY,frontBottomLeft.y+angleboxsizeY,frontBottomLeft.y]
+                            ];
 
-       return [xValues,yValues,xLabels,yLabels,labels];
+       return [xValues,yValues,xLabels,yLabels,labels,angleCoords];
     }
 
     function drawTriPrism(coordinates){
@@ -691,6 +698,17 @@
         marker: {size: 3,color: '#3F4591',},
         name:"",
       };
+
+      // render the points using plotly
+      var trace2 = {
+        x: coordinates[5][0],
+        y: coordinates[5][1],
+        type: 'scatter',
+        mode: 'lines+markers', 
+        marker: {size: 3,color: '#3F4591',},
+        name:"",
+      };
+
 
       // Calculate the min and max values for x and y
       // Use this to autoscale the grid to fit the box
@@ -751,7 +769,7 @@
         hoverinfo:'none'
       };   
       
-      var data = [trace1,lengthLabels];
+      var data = [trace1,trace2,lengthLabels];
       Plotly.newPlot('plot', data, layout,{displayModeBar: false});
     }
     catch (err) {
