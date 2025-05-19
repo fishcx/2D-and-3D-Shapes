@@ -1,6 +1,6 @@
 <script>
 	$(document).ready(function() {
-    
+   
     $('.changeItem').change(function(){
         $('#generate').click();
     });
@@ -14,7 +14,7 @@
              return false;  
           }
     });
-    
+
     var testing = false;
     $('#generate').click(function(){
         if(!testing){$("#answer").hide(); $("#show-answer").val("Show Answer");}
@@ -575,6 +575,7 @@
       };
       
       // render the points using plotly
+      /*
       var trace2 = {
         x: coordinates[5],
         y: coordinates[6],
@@ -586,6 +587,7 @@
         marker: {size: 3,color: '#3F4591',},
         name:"",
       };
+      */
 
       // Calculate the min and max values for x and y
       // Use this to autoscale the grid to fit the box
@@ -646,7 +648,8 @@
         hoverinfo:'none'
       };   
       
-      var data = [trace1,trace2,lengthLabels];
+      //var data = [trace1,trace2,lengthLabels];
+      var data = [trace1,lengthLabels];
       Plotly.newPlot('plot', data, layout,{displayModeBar: false});
     }
     catch (err) {
