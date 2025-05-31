@@ -192,7 +192,7 @@
            
            // Circles
            case 3: 
-           var r = random(3,9);
+           var r = randomDec(3,15,1);
            d = 2*r;
            
            problem = "\\(A= \\pi r^2 ~~~~~~~ C = \\pi d \\)<br>";
@@ -201,7 +201,7 @@
            
               // Finding Area
               case 0:  
-              b = r*r;           
+              b = formatDec(r*r);           
               a = formatDec(round(b*Math.PI*100)/100);
               
               problem += "What is the area of the circle shown?";
@@ -688,6 +688,7 @@
 
        return [xValues,yValues,xLabels,yLabels,labels,angleCoords];
     }
+    
 
     function drawTriPrism(coordinates){
     try {
