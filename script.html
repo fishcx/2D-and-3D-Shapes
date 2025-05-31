@@ -192,7 +192,7 @@
            
            // Circles
            case 3: 
-           var r = randomDec(3,15,1); 
+           var r = randomDec(4,20,1); 
            d = 2*r;
            
            problem = "\\(A= \\pi r^2 ~~~~~~~ C = \\pi d \\)<br>";
@@ -801,16 +801,17 @@ function drawCircle(diameter,isRadius,lengthLabel){
     var yCoords = [diameter/2+1, diameter/2+1];
 
     var angle = random(1,35)*10; 
-    var labelPosition = "top center";
-
-/*
-    if(angle < 95 || angle > 265){
-      labelPosition += " right";
+    var labelPosition = ""; 
+    if((angle > 205 && angle < 320) ){
+      labelPosition = "left";
+    }
+    else if((angle > 25 && angle < 145)){
+      labelPosition = "right";
     }
     else{
-      labelPosition += "left";
+      labelPosition = "center";
     }
-*/
+
     var newCoords = rotateCoordinates(angle,xCoords,yCoords,diameter/2+1,diameter/2+1);
     xCoords = newCoords[0];
     yCoords = newCoords[1];
@@ -884,7 +885,7 @@ function drawCircle(diameter,isRadius,lengthLabel){
         text:[lengthLabel],
         textposition:labelPosition,
         textfont: {
-          size:30,
+          size:20,
         },
         hoverinfo:'none'
       };   
