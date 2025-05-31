@@ -192,7 +192,7 @@
            
            // Circles
            case 3: 
-           var r = randomDec(3,15,1);
+           var r = randomDec(3,15,1); 
            d = 2*r;
            
            problem = "\\(A= \\pi r^2 ~~~~~~~ C = \\pi d \\)<br>";
@@ -784,8 +784,11 @@
     }
 
 function drawCircle(diameter,isRadius,lengthLabel){
+
     try {
       var xCoords = [];
+      var xLabels = [];
+      var yLabels = [1+diameter/2+(1+diameter)/15];
 
       if(isRadius){ // draw a radius
         xCoords = [1+diameter/2, 1+diameter];
@@ -795,9 +798,30 @@ function drawCircle(diameter,isRadius,lengthLabel){
         xLabels = [.5*diameter+1];
       }
 
+    var yCoords = [diameter/2+1, diameter/2+1];
+
+    var angle = random(1,35)*10; 
+    var labelPosition = "top center";
+
+/*
+    if(angle < 95 || angle > 265){
+      labelPosition += " right";
+    }
+    else{
+      labelPosition += "left";
+    }
+*/
+    var newCoords = rotateCoordinates(angle,xCoords,yCoords,diameter/2+1,diameter/2+1);
+    xCoords = newCoords[0];
+    yCoords = newCoords[1];
+
+    var newLabelCoords = rotateCoordinates(angle,xLabels,yLabels,diameter/2+1,diameter/2+1);
+    xLabels = newLabelCoords[0];
+    yLabels = newLabelCoords[1];
+
      var trace1 = {
         x: xCoords,
-        y: [diameter/2+1, diameter/2+1],
+        y: yCoords,
         type: 'scatter',
         mode: 'lines+markers', 
         marker: {size: 3,color: '#3F4591',},
@@ -855,12 +879,12 @@ function drawCircle(diameter,isRadius,lengthLabel){
       
       var labels =   {
         x: xLabels,
-        y: [1+diameter/2+(1+diameter)/25],
+        y: yLabels,
         mode: 'text',
         text:[lengthLabel],
-        textposition:"center",
+        textposition:labelPosition,
         textfont: {
-          size:20,
+          size:30,
         },
         hoverinfo:'none'
       };   
@@ -875,4 +899,32 @@ function drawCircle(diameter,isRadius,lengthLabel){
     
     }
 
+    // helper function to multiply every item in an array by a number
+    function rotateCoordinates(angle,xArray,yArray,centerX,centerY){
+       
+       var newX = [];
+       var newY = [];
+       
+       var temp;
+       for(var i = 0; i < xArray.length; i++) {
+	         //newX[i] = Math.cos(radians)*xArray[i]-Math.sin(radians)*yArray[i];
+          //newY[i] = Math.sin(radians)*xArray[i]+Math.cos(radians)*yArray[i];
+          temp = rotate(centerX,centerY,xArray[i],yArray[i],angle);
+          newX[i] = temp[0];
+          newY[i] = temp[1];
+        }
+        
+        return [newX,newY];
+       
+    }
+
+    // unused helper function to rotate around a different center (cx, cy)
+    function rotate(cx, cy, x, y, angle) {
+    var radians = (Math.PI / 180) * angle;
+        var cos = Math.cos(radians);
+        var sin = Math.sin(radians);
+        var nx = (cos * (x - cx)) + (sin * (y - cy)) + cx;
+        var ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+    return [nx, ny];
+}
 </script>
