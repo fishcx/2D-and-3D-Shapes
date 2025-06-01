@@ -538,16 +538,18 @@
       
        var labels = [a,b,c];
 
+      var stretchDistance = Math.sqrt(c**2/2);
+
       // Define the coordinates of the prism's vertices
       const frontBottomLeft = { x: -1*a/2, y: -1*b / 2 };
       const frontBottomRight = { x: a/2, y: -1*b / 2 };
       const frontTopLeft = { x: -1*a/2 , y: b / 2 };
       const frontTopRight = { x: a/2 , y: b / 2 };
 
-      const backBottomLeft = { x: -1*a/2 +c, y:  -1*b / 2 + c };
-      const backBottomRight = { x:  a/2 +c, y: -1*b / 2 + c };
-      const backTopLeft = { x: -1*a/2 +c, y: b / 2 + c };
-      const backTopRight = { x: a/2+c, y: b / 2 + c };
+      const backBottomLeft = { x: -1*a/2 +stretchDistance, y:  -1*b / 2 + stretchDistance };
+      const backBottomRight = { x:  a/2 +stretchDistance, y: -1*b / 2 + stretchDistance };
+      const backTopLeft = { x: -1*a/2 +stretchDistance, y: b / 2 + stretchDistance};
+      const backTopRight = { x: a/2+stretchDistance, y: b / 2 + stretchDistance };
       
        var xValues = [frontTopLeft.x,frontTopRight.x,frontBottomRight.x,frontBottomLeft.x,frontTopLeft.x,backTopLeft.x,backTopRight.x,frontTopRight.x,frontBottomRight.x,backBottomRight.x,backTopRight.x];
        var yValues = [frontTopLeft.y,frontTopRight.y, frontBottomRight.y, frontBottomLeft.y,frontTopLeft.y,backTopLeft.y,backTopRight.y,frontTopRight.y,frontBottomRight.y,backBottomRight.y,backTopRight.y];
@@ -596,11 +598,14 @@
       const yMin = Math.min(coordinates[1]);
       const yMax = Math.max(coordinates[1]);
       
+      const min = Math.min(xMin,yMin);
+      const max = Math.max(xMax,yMax);
+
       var xaxis_template ={
         showgrid: false,
         zeroline: false,
         nticks: 23,
-        range: [xMin, xMax], 
+        range: [min, max], 
         showticklabels:false
       };        
 
@@ -608,7 +613,7 @@
         showgrid: false,
         zeroline: false,
         nticks: 23,
-        range: [yMin, yMax], 
+        range: [min, max], 
         showticklabels:false
       };   
 
@@ -664,14 +669,16 @@
       
        var labels = [a,b,c];
 
+      var stretchDistance = Math.sqrt(c**2/2);
+
       // Define the coordinates of the prism's vertices
       const frontBottomLeft = { x: -1*a/2, y: -1*b / 2 };
       const frontBottomRight = { x: a/2, y: -1*b / 2 };
       const frontTopLeft = { x: -1*a/2 , y: b / 2 };
 
-      const backBottomLeft = { x: -1*a/2 +c, y: -1*b / 2 + c };
-      const backBottomRight = { x:  a/2 +c, y: -1*b / 2 + c };
-      const backTopLeft = { x: -1*a/2 +c, y: b / 2 + c };
+      const backBottomLeft = { x: -1*a/2 +c, y: -1*b / 2 + stretchDistance };
+      const backBottomRight = { x:  a/2 +c, y: -1*b / 2 + stretchDistance };
+      const backTopLeft = { x: -1*a/2 +c, y: b / 2 + stretchDistance };
       
        var xValues = [frontTopLeft.x,frontBottomRight.x,frontBottomLeft.x,frontTopLeft.x,backTopLeft.x,backBottomRight.x,frontBottomRight.x];
        var yValues = [frontTopLeft.y, frontBottomRight.y, frontBottomLeft.y,frontTopLeft.y,backTopLeft.y,backBottomRight.y,frontBottomRight.y];
@@ -681,9 +688,6 @@
       
        var xlength = frontBottomRight.x-frontBottomLeft.x;
        var ylength = frontTopLeft.y-frontBottomLeft.y;
-      
-       var maxLength = Math.max(xlength,ylength);
-
        var angleboxsizeY = 1;
        var angleboxsizeX = 1;
        var angleCoords = [
@@ -728,7 +732,7 @@
       
       const min = Math.min(xMin,yMin);
       const max = Math.max(xMax,yMax);
-
+      
       var xaxis_template ={
         showgrid: false,
         zeroline: false,
