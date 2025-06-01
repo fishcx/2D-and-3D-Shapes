@@ -309,7 +309,7 @@
            // Volume of Prisms
            case 4: 
            problem = "\\(V = Bh\\)<br>";
-           switch(random(0,2)){       
+           switch(random(2,2)){       
               // Non-rectangular
               case 0:
               h = random(5,20);
@@ -679,6 +679,11 @@
        var xLabels = [(frontBottomLeft.x+frontBottomRight.x)/2,frontBottomLeft.x-1.5,(frontBottomRight.x+backBottomRight.x)/2+1];
        var yLabels = [frontBottomLeft.y-1,(frontBottomLeft.y+frontTopLeft.y)/2,(frontBottomRight.y+backBottomRight.y)/2-1];
       
+       var xlength = frontBottomRight.x-frontBottomLeft.x;
+       var ylength = frontTopLeft.y-frontBottomLeft.y;
+      
+       var maxLength = Math.max(xlength,ylength);
+
        var angleboxsizeY = 1;
        var angleboxsizeX = 1;
        var angleCoords = [
@@ -721,11 +726,14 @@
       const yMin = Math.min(coordinates[1]);
       const yMax = Math.max(coordinates[1]);
       
+      const min = Math.min(xMin,yMin);
+      const max = Math.max(xMax,yMax);
+
       var xaxis_template ={
         showgrid: false,
         zeroline: false,
         nticks: 23,
-        range: [xMin, xMax], 
+        range: [min, max], 
         showticklabels:false
       };        
 
@@ -733,7 +741,7 @@
         showgrid: false,
         zeroline: false,
         nticks: 23,
-        range: [yMin, yMax], 
+        range: [min, max], 
         showticklabels:false
       };   
 
