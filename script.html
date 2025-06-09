@@ -22,8 +22,10 @@
 
         var type;
         // handles the formatting for selecting any type
-        if($("#type").val()=="any"){type = random(1,6);}
+        if($("#type").val()=="any"){type = random(1,7);}
         else{type = parseInt($("#type").val())}
+
+        if(type == 7){ $("#show-answer").hide(); } else{ $("#show-answer").show(); }
 
         generate(parseInt(type));       
      });
@@ -49,6 +51,7 @@
                          "https://www.youtube.com/watch?v=EPuKTEcR3_E",
                          "https://www.youtube.com/watch?v=r2kG5V_Bcpg",
                          "https://www.youtube.com/watch?v=Mwc7118vPno",
+                         "",
                          "https://www.youtube.com/watch?v=Fite-lgNjGc"];
        
        if(videoLinks[type-1].length != 0){ 
@@ -181,8 +184,9 @@
                   break;
               
               }
-              
-              problem = "Can a triangle have side lengths of "+mixSides(a,b,c)+"?";
+              var sidesTri = [a,b,c];
+              shuffleArray(sidesTri);
+              problem = "Can a triangle have side lengths of \\("+sidesTri[0]+", "+sidesTri[1]+",\\) and \\("+sidesTri[2]+"\\)?";
 
               break;
            
@@ -359,7 +363,7 @@
            break;
            
            // Interior Angles of Polygons
-           case 7:
+           case 8:
            
            a = random(4,20,1); // number of sides
            b = (a-2)*180; // interior angle sum          
@@ -399,6 +403,61 @@
            answer = "\\("+a+"^{o}\\)";
            
            break;
+
+           // Drawing Triangles
+           case 7:
+           var letters = "ABCDEFGHIJKLM";
+
+           var letter1 = letters.charAt(random(0,letters.length-1));
+           var letter2, letter3;
+
+           do{ letter2 = letters.charAt(random(0,letters.length-1));  letter3 = letters.charAt(random(0,letters.length-1)); }
+           while(letter1 == letter2 || letter2 == letter3 || letter1 == letter3);
+
+           switch(random(0,1)){
+
+              // ASA
+              case 0:
+              var angle1 = random(5,15); 
+              var angle2 = random(5,33-angle1)*5;
+              angle1 = angle1*5;
+              var side1 = random(3,8); // distance in centimeters
+
+              var side1Name = "\\("+letter1+letter2+"\\)";
+              var angle1Name = "\\(m\\angle "+letter1+letter2+letter3;
+              var angle2Name = "\\(m\\angle "+letter3+letter1+letter2;
+
+              var pieces = [side1Name+" = "+side1+" cm", angle1Name+" = "+angle1+"\\degree\\)",angle2Name+" = "+angle2+"\\degree\\)"];
+              shuffleArray(pieces);
+
+              problem = "Draw \\(\\Delta "+letter1+letter2+letter3+"\\) given "+pieces[0]+", "+pieces[1]+", and "+pieces[2];
+              //drawTriangleASA(angle1,side,angle2);
+              //$('#plot').show();
+              //answer = "\\("+a+"^{o}\\)";
+              break;
+
+              // SAS
+              case 1:
+              var angle1 = random(5,26)*5; 
+              var side1 = random(3,8); // distance in centimeters
+              var side2 = random(3,8); // distance in centimeters
+
+              var side1Name = "\\("+letter1+letter2+"\\)";
+              var side2Name = "\\("+letter2+letter3+"\\)";
+              var angle1Name = "\\(m\\angle "+letter1+letter2+letter3;
+
+              var pieces = [side1Name+" = "+side1+" cm", angle1Name+" = "+angle1+"\\degree\\)",side2Name+" = "+side2+" cm", ];
+              shuffleArray(pieces);
+
+              problem = "Draw \\(\\Delta "+letter1+letter2+letter3+"\\) given "+pieces[0]+", "+pieces[1]+", and "+pieces[2];
+              //drawTriangleASA(angle1,side,angle2);
+              //$('#plot').show();
+              //answer = "\\("+a+"^{o}\\)";
+              break;
+
+           }
+           
+           break;
            
        }
 
@@ -406,46 +465,94 @@
        $("#answer").html(doublesigns(answer));
        
        renderMathInElement(document.body);
-       
-       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"generated"]);
-       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
+      
 	}
-    
-    
-    // function that rearranges the side lengths
-    function mixSides(side1,side2,side3)
-    { 
-      var outputStr = "";
-      switch(random(0,5)){
 
-          case 0:
-          outputStr = side1+", "+side2+",\\) and \\("+side3;
-          break;
+    // function that draws the triangle **NOT DONE**
+    function drawTriangleASA(angle1,side,angle2) {
+    try {
 
-          case 1:
-          outputStr = side1+", "+side3+",\\) and \\("+side2;
-          break;
+      var angleOffset = random(0,Math.PI*1.5);
 
-          case 2:
-          outputStr = side2+", "+side3+",\\) and \\("+side1;
-          break;
+      // render the angle using plotly
+      var trace1 = {
+        x: [1.3*Math.cos(angleOffset), 0, 1.3*Math.cos(angle+angleOffset)],
+        y: [1.3*Math.sin(angleOffset), 0, 1.3*Math.sin(angle+angleOffset)],
+        type: 'scatter',
+        text: ['A', 'B', 'C'],
+        textposition: 'top',
+        type: 'scatter',
+        mode: 'lines+markers+text',        
+        line: {
+          color: '#3F4591',
+          width: 2
+        },
+        name:"",
+      };    
+      
+      var axis_template ={
+        showgrid: false,
+        zeroline: false,
+        showticklabels: false,
+        nticks: 2,
+        range: [-1.5,1.5],
+      };
+      
+      // make grid smaller for mobile
+      var gridsize;
+      var indent;
+      // gridsize= Math.min(.95*window.innerWidth,550);
+      
+      if(window.innerWidth > 601){
+         gridsize = 550;
+         indent = 20;
+      }else{
+         gridsize = 350;
+         indent = 0;
+      }
+      
+      var layout = {
+        xaxis:axis_template,
+        yaxis:axis_template,
+        showlegend: false,
+        width: gridsize,
+        height: gridsize,
+        margin: {l: indent,  r: 30, t: 20}
+      };    
+      
+      var xValues = [];
+      var yValues = [];
+      
+      // new way to make the arc
+      // start at the offset, end at the offset+angle
+      for(var i = angleOffset; i <= angle+angleOffset; i = i+0.001){
 
-          case 3:
-          outputStr = side2+", "+side1+",\\) and \\("+side3;
-          break;
-
-          case 4:
-          outputStr = side3+", "+side1+",\\) and \\("+side2;
-          break;
-
-          case 5:
-          outputStr = side3+", "+side2+",\\) and \\("+side1;
-          break;
+          xValues.push(0.2*Math.cos(i));
+          yValues.push(0.2*Math.sin(i));
 
       }
 
-      return "\\("+outputStr+"\\)";
+      // render the arc using plotly
+      var trace2 = {
+        x: xValues,
+        y: yValues,
+        type: 'scatter',
+        mode: 'lines',        
+        line: {
+          color: '#3F4591',
+          width: 2
+        },
+        name:"",
+      };
+      
+      var data = [trace1, trace2];
+      Plotly.newPlot('plot', data, layout,{displayModeBar: false});
     }
+    catch (err) {
+      console.error(err)
+      alert(err)
+    }
+  }
 
     // function that draws the angle
     function draw(angle) {
