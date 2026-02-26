@@ -200,15 +200,21 @@
            d = 2*r;
            
            problem = "\\(A= \\pi r^2 ~~~~~~~ C = \\pi d \\)<br>";
-           
+
+           var roundtenth = true;
+           var roundType = "tenth."
+           if(random(0,1)==0){ roundtenth = false; roundType = "hundredth.";}
+
            switch(random(0,4)){
            
               // Finding Area
               case 0:  
-              b = formatDec(r*r);           
-              a = formatDec(round(b*Math.PI*100)/100);
-              
-              problem += "What is the area of the circle shown?";
+              b = formatDec(r*r);
+              a = formatDec(b*Math.PI);
+              if(roundtenth){ a = formatDec(round(a*10)/10).toFixed(1); }
+              else{ a = formatDec(round(a*100)/100).toFixed(2); }           
+                            
+              problem += "What is the area of the circle shown? Write your answer in terms of pi and then rounded to the nearest "+roundType;
               
               switch(random(0,1)){
                  // give radius
@@ -229,9 +235,11 @@
               
               // Finding Circumference
               case 1:  
-              c = formatDec(round(d*Math.PI*100)/100);
+              c = formatDec(d*Math.PI);
+              if(roundtenth){ c = formatDec(round(c*10)/10).toFixed(1); }
+              else{ c = formatDec(round(c*100)/100).toFixed(2); }     
               
-              problem += "What is the circumference of the circle shown? ";
+              problem += "What is the circumference of the circle shown? Write your answer in terms of pi and then rounded to the nearest "+roundType;
               
               switch(random(0,1)){
                  // give radius
@@ -467,6 +475,90 @@
        renderMathInElement(document.body);
       
 	}
+
+  // function that draws the triangle **NOT DONE**
+    function drawTriangleSAS(s1,a1,s2) {
+    try {
+
+      // render the angle using plotly
+      var trace1 = {
+        x: [1.3*Math.cos(angleOffset), 0, 1.3*Math.cos(angle+angleOffset)],
+        y: [1.3*Math.sin(angleOffset), 0, 1.3*Math.sin(angle+angleOffset)],
+        type: 'scatter',
+        text: ['A', 'B', 'C'],
+        textposition: 'top',
+        type: 'scatter',
+        mode: 'lines+markers+text',        
+        line: {
+          color: '#3F4591',
+          width: 2
+        },
+        name:"",
+      };    
+      
+      var axis_template ={
+        showgrid: false,
+        zeroline: false,
+        showticklabels: false,
+        nticks: 2,
+        range: [-1.5,1.5],
+      };
+      
+      // make grid smaller for mobile
+      var gridsize;
+      var indent;
+      // gridsize= Math.min(.95*window.innerWidth,550);
+      
+      if(window.innerWidth > 601){
+         gridsize = 550;
+         indent = 20;
+      }else{
+         gridsize = 350;
+         indent = 0;
+      }
+      
+      var layout = {
+        xaxis:axis_template,
+        yaxis:axis_template,
+        showlegend: false,
+        width: gridsize,
+        height: gridsize,
+        margin: {l: indent,  r: 30, t: 20}
+      };    
+      
+      var xValues = [];
+      var yValues = [];
+      
+      // new way to make the arc
+      // start at the offset, end at the offset+angle
+      for(var i = angleOffset; i <= angle+angleOffset; i = i+0.001){
+
+          xValues.push(0.2*Math.cos(i));
+          yValues.push(0.2*Math.sin(i));
+
+      }
+
+      // render the arc using plotly
+      var trace2 = {
+        x: xValues,
+        y: yValues,
+        type: 'scatter',
+        mode: 'lines',        
+        line: {
+          color: '#3F4591',
+          width: 2
+        },
+        name:"",
+      };
+      
+      var data = [trace1, trace2];
+      Plotly.newPlot('plot', data, layout,{displayModeBar: false});
+    }
+    catch (err) {
+      console.error(err)
+      alert(err)
+    }
+  }
 
     // function that draws the triangle **NOT DONE**
     function drawTriangleASA(angle1,side,angle2) {
